@@ -29,7 +29,7 @@ public class MenuReconocimiento extends AppCompatActivity {
             //Toast.makeText(this,placa,Toast.LENGTH_LONG).show();
             runOnUiThread(() -> {
                 try {
-                    new HttpGetRequest(binding).execute("http://34.125.242.85:8080/api/consultar/"+placa);
+                    new HttpGetRequest(binding,this).execute("http://34.125.242.85:8080/api/consultar/"+placa);
                     //
                 } catch (Exception e) {
                     throw new RuntimeException(e);

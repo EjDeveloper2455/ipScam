@@ -2,6 +2,7 @@ package com.softs.hn.ip.ipscam;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -24,7 +25,7 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
 	private Context context;
 	private ActivityMenuReconocimientoBinding binding;
 
-	public HttpGetRequest(ActivityMenuReconocimientoBinding binding) {
+	public HttpGetRequest(ActivityMenuReconocimientoBinding binding,Context context) {
 		this.context = context;
 		this.binding = binding;
 	}
@@ -62,6 +63,12 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		try {
+			//Toast.makeText(context,"Llega aqui"+result,Toast.LENGTH_LONG).show();
+			if(result == null || result.isEmpty()){
+				binding.layout404.setVisibility(View.VISIBLE);
+				binding.layout200.setVisibility(View.GONE);
+				return;
+			}
 			JSONArray res = new JSONArray(result);
 			if (res.length()>0){
 				JSONObject json = res.getJSONObject(0);
@@ -77,8 +84,13 @@ public class HttpGetRequest extends AsyncTask<String, Void, String> {
 				binding.estadoDetalle.setText(json.get("estado").toString());
 				binding.diasMoraDetalle.setText(json.get("dias_mora").toString());
 				binding.montoAdeudadoDetalle.setText(json.get("montoAdeudato").toString());
+			}else{
+				binding.layout404.setVisibility(View.VISIBLE);
+				binding.layout200.setVisibility(View.GONE);
 			}
 		} catch (JSONException e) {
+			binding.layout404.setVisibility(View.VISIBLE);
+			binding.layout200.setVisibility(View.GONE);
 			throw new RuntimeException(e);
 		}
 	}
